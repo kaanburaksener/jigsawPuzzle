@@ -1,4 +1,4 @@
 Jigsaw Puzzle
 ====
 
-The game for Front-End Project
+A Puzzle Game for Front-End Project
