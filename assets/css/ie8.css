@@ -1,0 +1,10 @@
+#product-left #product-image-thumbs{}
+#product-left #product-image-thumbs li{margin:8px;}
+#product-left #product-image-thumbs li:first-child{margin-left:0;}
+#product-left #product-image-thumbs li:last-child{margin-right:0;}
+
+#product > #features .span4{width: 311px;}
+#product > #features .span4:first-child + .span4 + .span4{border-right:none !important;}
+
+
+section#features .span4:first-child + .span4 + .span4{border-right:none !important; width:311px;}

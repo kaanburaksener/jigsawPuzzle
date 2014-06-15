@@ -1,0 +1,4 @@
+/** Chrome Outline Fix */
+input, textarea, select, button {
+    outline: none !important;
+}

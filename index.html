@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jigsaw Puzzle is a puzzle game which was made by Kaan Burak Sener">
+    <meta name="author" content="Kaan Burak Sener">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    <title>Jigsaw Puzzle</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css" >
+
+    <!-- App CSS -->
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <!-- Google Fonts-->
+    <link href='http://fonts.googleapis.com/css?family=Francois+One' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div id="startMenu">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h3 class="title">JIGSAW PUZZLE</h3>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-5 col-md-4 col-md-offset-5 col-sm-4 col-sm-offset-5 col-xs-4 col-xs-offset-5">
+                    <img src="assets/img/logo.jpg" alt="Logo" class="img-circle">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-5 col-md-4 col-md-offset-5 col-sm-4 col-sm-offset-5 col-xs-4 col-xs-offset-5">
+                    <a href="#" class="btn btn-large" id="startButton" role="button">START <span class="glyphicon glyphicon-play"></span></a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-5 col-md-4 col-md-offset-5 col-sm-4 col-sm-offset-5 col-xs-4 col-xs-offset-5">
+                    <a href="#" class="btn btn-large" id="settingsButton" role="button">SETTINGS <span class="glyphicon glyphicon-cog"></span></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- /#startMenu -->
+
+    <div id="settings">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h3 class="title">SETTINGS</h3>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="cellType" class="col-sm-2 control-label">Cell Type : </label>
+
+                            <div class="col-sm-10">
+                                <select class="form-control" id="cellType">
+                                    <option value="Numeric" selected="selected">Numeric</option>
+                                    <option value="Photographic">Photographic</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="columnSize" class="col-sm-2 control-label">Column Size : </label>
+
+                            <div class="col-sm-10">
+                                <select class="form-control" id="columnSize">
+                                    <option value="1" selected="selected">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rowSize" class="col-sm-2 control-label">Row Size : </label>
+
+                            <div class="col-sm-10">
+                                <select class="form-control" id="rowSize">
+                                    <option value="1" selected="selected">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edgeLength" class="col-sm-2 control-label">Edge Length : </label>
+
+                            <div class="col-sm-10">
+                                <select class="form-control" id="edgeLength">
+                                    <option value="50" selected="selected">50 px</option>
+                                    <option value="75">75 px</option>
+                                    <option value="100">100 px</option>
+                                    <option value="125">125 px</option>
+                                    <option value="150">150 px</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 col-lg-offset-5 col-md-4 col-md-offset-5 col-sm-4 col-sm-offset-5 col-xs-4 col-xs-offset-5">
+                        <a href="#" class="btn btn-large" id="saveButton" role="button">SAVE <span class="glyphicon glyphicon-ok"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /#settings -->
+
+    <div id="gameContainer"></div><!-- /#gameContainer -->
+
+    <div id="board">
+        <div id="timer"></div>
+        <div id="scoreBoard"></div>
+    </div><!-- /#board -->
+
+    <div id="finalScreen">
+        <h1 id="gameResult"></h1>
+        <div id="resultImage"></div>
+        <h2>Your Score : <span id="playerScore"></span></h2>
+        <a href="#" class="btn btn-large" id="restartButton" role="button">RESTART <span class="glyphicon glyphicon-repeat"></span></a>
+    </div><!-- /#finalScreen -->
+
+<!-- Javascripts -->
+<script src="assets/vendor/jquery/jquery-1.9.0.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/sound.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>

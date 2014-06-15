@@ -1,0 +1,41 @@
+/**** MOBILE VERTICAL ****/
+@media only screen and (min-width: 320px) and (max-width: 479px) {
+
+
+
+}
+
+/**** MOBILE HORIZONTAL ****/
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+
+
+
+}
+
+/**** TABLET VERTICAL ****/
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+
+
+
+}
+
+/**** TABLET VERTICAL ****/
+@media only screen and (min-width: 1024px) {
+
+
+
+}
+
+/**** LAPTOP ****/
+@media only screen and (min-width: 1200px) {
+
+
+
+}
+
+/**** MAC / LARGE SCREENS ****/
+@media only screen and (min-width: 1400px) {
+
+
+
+}
