@@ -237,8 +237,6 @@ function JigsawController() {
                             that.changePosition(p.getId(), p.getX(), p.getY());
 
                             document.getElementById(p.getId()).className += " pieceCorrect";
-
-                            delete grid.pieces[p.getId()]; //If piece is on right cell, delete for not to check any overlapped with other piece in grid
                         }
                         else {
                             var randCoordinate = that.getRandomXY();
@@ -447,7 +445,7 @@ function JigsawController() {
         for(var pie in grid.pieces) {
             var p = grid.pieces[pie];
 
-            if(p.id != piece.getId()) {
+            if(p.getId() != piece.getId() && p.getMoveable() == true) {
                 if(this.isOverlappedWithPiece(pCoord, p)) {
                     piece.movePassive();
                     this.overlappedZone(piece, p);
