@@ -8,6 +8,7 @@ var stopWatch; //This will be an instance of stopWatch class
 //Class JigsawController
 function JigsawController() {
     // Game Settings Variables
+
     var cellType; //It determines the cell and piece types which are photographic and numeric
     var cellNumber; //Total cells and pieces number
     var choosenPiece; //Id of clicked piece 
@@ -237,6 +238,13 @@ function JigsawController() {
                             that.changePosition(p.getId(), p.getX(), p.getY());
 
                             document.getElementById(p.getId()).className += " pieceCorrect";
+
+                            if(that.checkEndGame()) {
+					        	that.gameResult = 1; //Win
+					            playSound( SOUND_WIN , .8 );
+					            player.setScore(that.calculateScore());
+					            that.drawFinalScreen();
+					        }
                         }
                         else {
                             var randCoordinate = that.getRandomXY();
@@ -249,6 +257,12 @@ function JigsawController() {
                             that.changePosition(p.getId(), randCoordinate.x, randCoordinate.y);  //Move the piece out of the grid, If the piece is on the wrong piece 
                         }
                     }
+
+                    if(moveTable.getMoveNumber() == 0) {
+			            that.gameResult = 0; //Lost
+			            playSound( SOUND_LOSE , .8 );
+			            that.drawFinalScreen();
+			        }
                 }
             }
 
@@ -265,7 +279,7 @@ function JigsawController() {
     JigsawController.prototype.calculateScore = function() {
         var totalTime = stopWatch.getTotalSeconds();
         var leftMoves = moveTable.getMoveNumber();
-        var initialTime = 60 - this.cellNumber; //If every piece is placed
+        var initialTime = stopWatch.getStartingTime() - this.cellNumber; //If every piece is placed
         var initialMoves = this.cellNumber;
         var score = parseInt((totalTime / initialTime) * 500 + (leftMoves / initialMoves) * 500);
 
@@ -312,25 +326,12 @@ function JigsawController() {
         if(stopWatch.getTotalSeconds() == 0) {
             this.gameResult = 0; //Lost
             playSound( SOUND_LOSE , .8 );
-            player.setScore(0);
             this.drawFinalScreen();
         }
         else if(stopWatch.getTotalSeconds() == 10) {
             playSound( SOUND_WARNING , 1. );
             document.getElementById("timer").className = "timer warning";
             
-        }
-        else if(this.checkEndGame()) {
-            this.gameResult = 1; //Win
-            playSound( SOUND_WIN , .8 );
-            player.setScore(this.calculateScore());
-            this.drawFinalScreen();
-        }
-        else if(moveTable.getMoveNumber() == 0) {
-            this.gameResult = 0; //Lost
-            playSound( SOUND_LOSE , .8 );
-            player.setScore(0);
-            this.drawFinalScreen();
         }
 
         if(this.gameResult == 1 || this.gameResult == 0) {
@@ -344,6 +345,10 @@ function JigsawController() {
         var screenH = $(window).height();
 
         return {w: screenW, h: screenH};
+    };
+
+    JigsawController.prototype.getCellNumber = function() {
+    	return this.cellNumber;
     }; 
 
     JigsawController.prototype.getCellObject = function(id) {
@@ -353,6 +358,10 @@ function JigsawController() {
             }
         }
     };//--> This method returns the cell object which has the id in parameter of the method, It is used for interaction between DOM elements and cell objects
+
+    JigsawController.prototype.getCellType = function() {
+    	return this.cellType;
+    };
 
     JigsawController.prototype.getColumnSize = function() {
         return this.columnSize;
@@ -836,6 +845,8 @@ function Piece(id,x,y,type,edgeLength) {
 //Class Player    
 function Player() {
     var playerScore;
+
+    this.initializer();
 };
 
 //Methods of the Player class
@@ -848,13 +859,17 @@ function Player() {
         this.playerScore = score;
     };
 
+    Player.prototype.initializer = function() {
+    	this.playerScore = 0;
+    };
+
 
 
 //Class MoveTable
-function MoveTable(moveNumber) {
+function MoveTable() {
     var moveNumberLeft;
 
-    this.initializer(moveNumber);
+    this.initializer();
     this.draw();
 };
 
@@ -872,8 +887,8 @@ function MoveTable(moveNumber) {
         return this.moveNumberLeft;
     };
 
-    MoveTable.prototype.initializer = function(moveNumber) {
-        this.moveNumberLeft = moveNumber;
+    MoveTable.prototype.initializer = function() {
+        this.moveNumberLeft = jigsawController.getCellNumber() * 2;
     };
 
     MoveTable.prototype.updateMoveNumber = function() {
@@ -888,13 +903,15 @@ function MoveTable(moveNumber) {
 
 
 //Class StopWatch
-function StopWatch (minutes, seconds) {
+function StopWatch () {
     var minutes;
     var seconds;
     var isStarted = false;
     var timer;
+    var startingTime;
 
-    this.start(minutes,seconds);
+    this.initializeStartingTime();
+    this.start();
 };
     
     //Methods of the StopWatch class
@@ -907,8 +924,24 @@ function StopWatch (minutes, seconds) {
         this.update();
     };
 
+    StopWatch.prototype.getStartingTime = function() {
+    	return this.startingTime;
+    };
+
     StopWatch.prototype.getTotalSeconds = function() {
         return this.minutes * 60 + this.seconds ;
+    };
+
+    StopWatch.prototype.initializeStartingTime = function () {
+    	this.startingTime = (jigsawController.getCellType() == "Photographic") ? jigsawController.getCellNumber() * 5 : Math.ceil((jigsawController.getCellNumber() * 5) / 2); 
+    	
+    	var divisor_minutes = this.startingTime % (60 * 60);
+    	var minutes = Math.floor(divisor_minutes / 60);
+    	var divisor_seconds = divisor_minutes % 60;
+    	var seconds = Math.ceil(divisor_seconds);
+
+    	this.minutes = minutes;
+        this.seconds = seconds
     };
 
     StopWatch.prototype.loop = function() {
@@ -931,9 +964,7 @@ function StopWatch (minutes, seconds) {
         }
     };
 
-    StopWatch.prototype.start = function(minutes,seconds) {
-        this.minutes = minutes;
-        this.seconds = seconds
+    StopWatch.prototype.start = function() {
         this.isStarted = true;
         this.draw(); //StopWatch is drawed
         var that = this; //Scope Fixing
@@ -948,7 +979,7 @@ function StopWatch (minutes, seconds) {
     };
 
     StopWatch.prototype.update = function() {
-        var string = (this.minutes  < 10 ? '0' + this.minutes  : this.minutes) + ':' + 
+        var string = (this.minutes < 10 ? '0' + this.minutes : this.minutes) + ':' + 
                      (this.seconds < 10 ? '0' + this.seconds : this.seconds);
         
         document.getElementById("timer").innerHTML = string;
@@ -966,11 +997,9 @@ $(document).ready(function(){
         jigsawController.createGrid();
         jigsawController.generateCells();
         jigsawController.generatePieces();
-
-        stopWatch = new StopWatch(1,0); //Create an instance of StopWatch class 
-        moveTable = new MoveTable(jigsawController.cellNumber * 2); //Create an instance of MoveTable class      
+        stopWatch = new StopWatch(); //Create an instance of StopWatch class 
+        moveTable = new MoveTable(); //Create an instance of MoveTable class      
         player = new Player(); //Create an instance of Player class
-        
         jigsawController.startEvents();
     });
 
